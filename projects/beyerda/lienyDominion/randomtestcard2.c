@@ -14,11 +14,11 @@ int checkSmithyCard(int p, int handP, struct gameState *post) {
 	post->whoseTurn = p;
 	memcpy(&pre, post, sizeof(struct gameState));
 	
-	int choice1 = floor(Random() * 3);
+	int choice1 = floor(Random() * 2);
 	int choice2 = 0;
 	int choice3 = 0;
 
-	int check = StewardRe(post, choice1, 0, 0, handP);
+	int check = stewardCard(post, choice1, 0, 0, handP);
 	
 
 	if (choice1 == 1){
@@ -28,7 +28,7 @@ int checkSmithyCard(int p, int handP, struct gameState *post) {
   }
   else if (choice1 == 2){
     //+2 coins
-    pre.coins = pre.coins + 2;		//Bug: +3 coins
+    pre.coins = pre.coins + 3;		//Bug: +3 coins
   }
   else{
     //trash 2 cards in hand

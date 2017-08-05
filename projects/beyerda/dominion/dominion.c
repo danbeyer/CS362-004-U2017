@@ -713,7 +713,7 @@ int StewardRe(struct gameState *state, int choice1, int choice2, int choice3, in
   }
   else if (choice1 == 2){
     //+2 coins
-    state->coins = state->coins + 3;		//Bug: +3 coins
+    state->coins = state->coins + 2;		//Bug: +3 coins - Fixed 08/-5/17
   }
   else{
     //trash 2 cards in hand

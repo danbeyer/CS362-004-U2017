@@ -13,35 +13,21 @@ int checkSmithyCard(int p, int handP, struct gameState *post) {
 	struct gameState pre;
 	post->whoseTurn = p;
 	memcpy(&pre, post, sizeof(struct gameState));
-	
-	int choice1 = floor(Random() * 3);
-	int choice2 = 0;
-	int choice3 = 0;
 
-	int check = StewardRe(post, choice1, 0, 0, handP);
-	
+	int check = smithyCard(post, handP);
 
-	if (choice1 == 1){
-    //+2 cards
-    drawCard(p, &pre);
-    drawCard(p, &pre);
-  }
-  else if (choice1 == 2){
-    //+2 coins
-    pre.coins = pre.coins + 2;		//Bug: +3 coins
-  }
-  else{
-    //trash 2 cards in hand
-    discardCard(choice2, p, &pre, 1);
-    discardCard(choice3, p, &pre, 1);
-  }
-
-  //discard card from hand
-  discardCard(handP, p, &pre, 0);
-  
-
-	
-	if(memcmp(&pre, post, sizeof(struct gameState)) == 0) {
+	if(pre.deckCount[p] <= 2) {
+			pre.deckCount[p] = pre.discardCount[p] - pre.deckCount[p];
+			pre.discardCount[p] = 0;
+			pre.playedCardCount += 1;
+			pre.handCount[p] += 2;
+	}
+	else {
+		pre.deckCount[p] -= 3;
+		pre.handCount[p] += 2;
+		pre.playedCardCount += 1;
+	}
+		if(memcmp(&pre, post, sizeof(struct gameState)) == 0) {
 		printf("Test passed!\n");
 		return 0;
 	}
@@ -65,7 +51,7 @@ int main() {
 
   struct gameState G;
 
-  printf ("Testing Steward.\n");
+  printf ("Testing Smithy.\n");
 
   printf ("RANDOM TESTS.\n");
 

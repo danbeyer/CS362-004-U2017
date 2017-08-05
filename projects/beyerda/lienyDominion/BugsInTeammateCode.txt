@@ -1,0 +1,56 @@
+Bug-Reports
+Bug #: 01
+Title:  Adventurer card draws three treasure cards instead of two. 
+
+Class:  Gameplay bug
+
+Is it reproducible: Yes
+
+Description
+===========
+When the adventurer card is played, the player draws three treasure cards instead of two.  This is because of this line in the code in the adventurerCard() function:
+while(drawntreasure < 3)
+This line should read while(drawntreasure < 2).  
+
+Steps to Produce/Reproduce
+--------------------------
+Start a new game.  Player buys adventurer card and adds it to their hand.  Player then plays the adventurer card, resulting in three treasure cards being drawn.
+
+Expected Results
+----------------
+Player should draw only two treasure cards when playing adventurer card.
+
+Actual Results
+--------------
+Player draws three treasure cards when playing adventurer card.
+
+Workarounds
+-----------
+There is no work arounds.  The bug does not make the game unplayable, but it does effect gameplay in that this card no longer follows its specified rules.
+
+Bug #: 02
+Title:  Village card no longer causes player to draw +1 card
+
+Class:  Gameplay bug
+
+Is it reproducible: Yes
+
+Description
+===========
+The village card does not cause the player that played the Village card to draw +1 card.  The normal activity of the village card is to allow the player to draw +1 card and gain +2 actions.
+
+Steps to Produce/Reproduce
+--------------------------
+Player plays village card. Player then receives the normal +2 actions, but does not receive the expected +1 draw card.
+
+Expected Results
+----------------
+Player plays village card then draws +1 more card and gains +2 actions.
+
+Actual Results
+--------------
+Player plays village card then gains +2 actions but does not draw +1 card.
+
+Workarounds
+-----------
+There are no work arounds.  This is not a game-ending bug but does effect gameplay in that it deviates from the village card expected behavior.

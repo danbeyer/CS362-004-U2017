@@ -8,54 +8,55 @@
 #include <stdlib.h>
 
 
-
-int checkSmithyCard(int p, int handP, struct gameState *post) {
+int checkAdventureCard(int p, struct gameState *post) {
 	struct gameState pre;
 	post->whoseTurn = p;
 	memcpy(&pre, post, sizeof(struct gameState));
-	
-	int choice1 = floor(Random() * 3);
-	int choice2 = 0;
-	int choice3 = 0;
 
-	int check = StewardRe(post, choice1, 0, 0, handP);
+	int check;
 	
 
-	if (choice1 == 1){
-    //+2 cards
-    drawCard(p, &pre);
-    drawCard(p, &pre);
-  }
-  else if (choice1 == 2){
-    //+2 coins
-    pre.coins = pre.coins + 2;		//Bug: +3 coins
-  }
-  else{
-    //trash 2 cards in hand
-    discardCard(choice2, p, &pre, 1);
-    discardCard(choice3, p, &pre, 1);
-  }
+	check = adventurerCard(post);
 
-  //discard card from hand
-  discardCard(handP, p, &pre, 0);
-  
+	int treasureCards = 0;
+	int drawnCard;
+	int tempHand[MAX_HAND];
+	int i=0;
 
 	
+	while(treasureCards < 3) {
+
+		drawCard(p,&pre);
+		drawnCard = pre.hand[p][pre.handCount[p] - 1];
+		if(drawnCard == copper || drawnCard == silver || drawnCard == gold) {
+			treasureCards++;
+		}
+		else {
+			pre.handCount[p]--;
+		}
+		
+	}
+
+	while(i-1 >=0) {
+		pre.discard[p][pre.discardCount[p]++] = tempHand[i-1];
+		i--;
+	}
+	//Test pre and post game states
 	if(memcmp(&pre, post, sizeof(struct gameState)) == 0) {
-		printf("Test passed!\n");
+		printf("Test passed!");
 		return 0;
 	}
 	else {
-		printf("Test failed!\n");
+		printf("Test failed!");
 		return 1;
 	}
+
 }
 
-
 int main() {
-
+	
 	//Much of this code comes from the testDrawCard.c implementation
-	int i, n, r, p, j, deckCount, discardCount, handCount;
+	int i, n, r, p, j, deckCount, discardCount, handCount, treasureCount, treasureLocation;
 	int goodResult = 0;	//counters for test results
 	int badResult = 0;
 	int testResult = 0;
@@ -65,7 +66,7 @@ int main() {
 
   struct gameState G;
 
-  printf ("Testing Steward.\n");
+  printf ("Testing Adventurer.\n");
 
   printf ("RANDOM TESTS.\n");
 
@@ -79,17 +80,25 @@ int main() {
 	
 	//Set number of players
     p = floor(Random() * 2);
-	//printf("p = %d\n", p);
+	printf("p = %d\n", p);
     G.deckCount[p] = floor(Random() * MAX_DECK);
 
     G.discardCount[p] = floor(Random() * MAX_DECK);
 
     G.handCount[p] = floor(Random() * MAX_HAND);
 	
-	G.playedCardCount = floor(Random() * 10);
-
-	int handPos = floor(Random() * G.handCount[p]);
-	testResult = checkSmithyCard(p, handPos, &G);
+	//set random cards
+	for(j=0; j < G.deckCount[p]; j++) {
+    	G.deck[p][j] = floor(Random() * 23);
+    }
+    for(j=0; j < G.discardCount[p]; j++) {
+    	G.discard[p][j] = floor(Random() * 23);
+    }
+	//treasureCount = floor(Random() * 10)+2;		//Set at least 2 treasure cards
+	//treasureLocation = floor(Random() * G.deckCount[p]);
+	//G.deck[p][treasureLocation] = copper;
+	
+	testResult = checkAdventureCard(p, &G);
 	if(testResult == 0) {
 		goodResult++;
 	}
